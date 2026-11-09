@@ -1,0 +1,8 @@
+reference_run,quantile,min_dist,inter_cluster_dist
+"Hsapien_IDRs_ftl100aa.MultiBlock.fixedKernel (window 70, step 10, 251223 windows)",0.1,22.152667,0.735032
+"Hsapien_IDRs_ftl100aa.MultiBlock.fixedKernel (window 70, step 10, 251223 windows)",0.25,28.083873,1.973226
+"Hsapien_IDRs_ftl100aa.MultiBlock.fixedKernel (window 70, step 10, 251223 windows)",0.4,33.045535,3.446991
+"Hsapien_IDRs_ftl100aa.MultiBlock.fixedKernel (window 70, step 10, 251223 windows)",0.5,36.459431,4.605011
+"Hsapien_IDRs_ftl100aa.MultiBlock.fixedKernel (window 70, step 10, 251223 windows)",0.6,40.190127,5.995152
+"Hsapien_IDRs_ftl100aa.MultiBlock.fixedKernel (window 70, step 10, 251223 windows)",0.75,47.242503,8.892385
+"Hsapien_IDRs_ftl100aa.MultiBlock.fixedKernel (window 70, step 10, 251223 windows)",0.9,60.316122,15.271793

@@ -1,0 +1,22 @@
+# OS / editor
+.DS_Store
+.claude/
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+*.nbi
+*.nbc
+
+# Fonts are not redistributed
+*.ttf
+
+# Large or third-party files (see README, "Not included")
+*.out_windows.csv
+*.out_windows.csv.gz
+!results/example_run/*.out_windows.csv.gz
+analysis/expression/RBPbase_Hs_DescriptiveID.xlsx
+
+# SLURM logs and run outputs
+*.out
+*.err
+results/fullseq/
