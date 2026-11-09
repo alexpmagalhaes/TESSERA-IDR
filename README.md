@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo/logo.png" alt="TESSERA-IDR logo" width="300">
+  <img src="logo/logo.png" alt="TESSERA-IDR logo" width="600">
 </p>
 
 # TESSERA-IDR
