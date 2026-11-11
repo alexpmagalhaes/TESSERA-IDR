@@ -118,10 +118,18 @@ from random scrambles. On the command line, the same cut-offs are
 ## Layout
 
 ```
-src/                     core pipeline
-  nardini_fullSeq_numba_v096.py    full-sequence assignment (fixed kernel)
-  nardini_MultiBlock_v099.py       sliding-window assignment + block building
-  nardini_summary_pipeline.py      summary -> block table, domain table, plots
+pyproject.toml           packaging for the `tesseraidr` package / command
+src/
+  tesseraidr/            the installable package (core pipeline)
+    fullseq.py             full-sequence assignment (fixed kernel)
+    multiblock.py          sliding-window assignment + block building
+    summary.py             summary -> block table, domain table, plots
+    cli.py                 the `tesseraidr` command
+    data/                  bundled reference tables (centroids, comp. features,
+                           GIN definitions, human seed thresholds)
+  nardini_fullSeq_numba_v096.py    thin wrappers around tesseraidr.*, kept so
+  nardini_MultiBlock_v099.py       `python src/<script>.py` and the Colab
+  nardini_summary_pipeline.py      notebook keep working
 scripts/hpc/             local and SLURM wrappers (run from any directory)
 colab/                   Google Colab notebook + its helper module
 analysis/
@@ -152,19 +160,56 @@ unpack. To look at one in a terminal: `gzip -dc file.csv.gz | head`.
 The pipeline writes its own outputs as plain `.csv`; compress them with
 `gzip -9` before committing.
 
-## Setup
+## Installation
+
+TESSERA-IDR installs as a Python package (Python >= 3.9) that provides the
+`tesseraidr` command. From the repository root:
 
 ```
-pip install -r requirements.txt
+pip install .                 # or: pip install -e .  (editable, for development)
+pip install ".[analysis]"     # also installs the extra notebook dependencies
 ```
+
+or straight from GitHub:
+
+```
+pip install "git+https://github.com/alexpmagalhaes/TESSERA-IDR.git"
+```
+
+The reference tables the pipeline needs (GIN centroids, compositional
+feature normalisation, GIN definitions, human seed thresholds) are bundled
+with the package, so `--comp_ref`, `--centroids` and `--gin_definitions`
+can be omitted. `tesseraidr data` prints where they are.
+
+```
+tesseraidr --help
+tesseraidr multiblock --input idrs.csv --n_workers 8 \
+    --out_windows run.out_windows.csv --out_summary run.out_summary.csv
+tesseraidr fullseq    --input idrs.csv --out_sequences run.out_sequences.csv \
+    --out_summary run.fullseq_summary.csv
+tesseraidr summary all --summary run.out_summary.csv --outdir figures
+```
+
+The options are the same as those of the original scripts (`tesseraidr
+<command> --help`). In Python:
+
+```python
+from tesseraidr import multiblock, fullseq, summary
+df, meta = multiblock.load_input_csv("idrs.csv")
+windows, blocks = multiblock.run_sliding_window(df, multiblock.CONFIG.copy(), metadata_df=meta)
+```
+
+Without installing, `pip install -r requirements.txt` and
+`python src/nardini_MultiBlock_v099.py ...` still work as before.
 
 `localcider` and `numba` can conflict with numpy 2 on some HPC module stacks;
 if either fails to import, pin `numpy<2`. Numba caches compiled kernels on
 first run; on a read-only home directory set
 `export NUMBA_CACHE_DIR=/scratch/$USER/numba_cache`.
 
-Plots use Arial when `Arial.ttf` is present (default: repo root for `src/`
-scripts, or pass `--arial_font_path`). The font is not distributed here; the
+Plots use Arial when `Arial.ttf` is found (`--arial_font_path`, else
+`$TESSERAIDR_ARIAL_TTF`, else `./Arial.ttf`, else the repo root, else a
+system Arial). The font is not distributed here; the
 scripts fall back to a default font without it.
 
 ## Running
@@ -225,3 +270,31 @@ python src/nardini_summary_pipeline.py all \
 - `block_summary_.csv.gz` is an export from `nardini_summary_pipeline.py` that
   adds `valley_start` / `valley_end`; the files in `results/summary_plots/`
   and `domain_architecture.csv.gz` come from that run.
+
+## Attribution and citation
+
+The full-sequence pipeline (`tesseraidr fullseq`, formerly
+`nardini_fullSeq_numba_v096.py`) is a **reimplementation (rewrite) of
+NARDINI+** and the GIN cluster assignment from Ruff, King et al. It is not
+the original code. The per-window features in `tesseraidr multiblock` use the
+same reimplementation. The feature definitions, the human-IDRome
+normalisation and the 30 GIN centroids bundled in `src/tesseraidr/data/`
+come from that work. If you use TESSERA-IDR, please cite:
+
+- Ruff KM, King MR, Ying AW, Liu V, Pant A, Lieberman WE, Shinn MK, Su X,
+  Kadoch C, Pappu RV. Molecular grammars of predicted intrinsically
+  disordered regions that span the human proteome. *Cell* 189(1):323-342.e17
+  (2026). [doi:10.1016/j.cell.2025.10.019](https://doi.org/10.1016/j.cell.2025.10.019).
+  Original code:
+  [RUFF_KING_Grammars_of_IDRs_using_NARDINI-](https://github.com/kierstenruff/RUFF_KING_Grammars_of_IDRs_using_NARDINI-)
+  (MIT License).
+- Cohan MC, Shinn MK, Lalmansingh JM, Pappu RV. Uncovering non-random binary
+  patterns within sequences of intrinsically disordered proteins. *J Mol Biol*
+  434(2):167373 (2022).
+  [doi:10.1016/j.jmb.2021.167373](https://doi.org/10.1016/j.jmb.2021.167373).
+
+## License
+
+TESSERA-IDR is released under the [MIT License](LICENSE). The original
+NARDINI+ / GIN code is also MIT-licensed (Copyright (c) 2025 kierstenruff);
+its copyright notice is kept in `LICENSE`.

@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "TESSERA-IDR"
+dynamic = ["version"]
+description = "GIN (grammars of IDRs) assignment of intrinsically disordered regions, on whole sequences or as multi-block sliding windows (NARDINI+ features)."
+readme = "README.md"
+requires-python = ">=3.9"
+authors = [{ name = "Alexandre P. Magalhaes" }]
+license = { text = "MIT" }
+keywords = ["IDR", "intrinsically disordered regions", "NARDINI", "GIN", "protein sequence"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+dependencies = [
+    "numpy",
+    "pandas",
+    "polars",
+    "scipy",
+    "tqdm",
+    "multiprocess",
+    "localcider",
+    "numba",
+    "matplotlib",
+    "seaborn",
+]
+
+[project.optional-dependencies]
+# used only by the notebooks in analysis/
+analysis = ["gseapy", "matplotlib-venn"]
+
+[project.scripts]
+tesseraidr = "tesseraidr.cli:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "tesseraidr.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["tesseraidr*"]
+
+[tool.setuptools.package-data]
+tesseraidr = ["data/*.csv", "data/*.csv.gz"]
