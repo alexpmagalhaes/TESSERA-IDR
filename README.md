@@ -104,7 +104,7 @@ Reference tables used by the notebook (`data/reference/`):
   10,592 published blocks, with its 90 z-scores, taken from the Sep 8 windows
   file behind the published blocks.
 
-For human IDRs the notebook shows the published blocks directly, and it can
+For human IDRs, the notebook shows the published blocks directly, and it can
 also recompute them with the published settings. For `seed_expand` it uses
 absolute seed cut-offs from `data/reference/seed_thresholds_human.csv`
 (quantiles of `min_dist` and `inter_cluster_dist` over the 251,223 windows of
@@ -112,7 +112,7 @@ the human run), because quantiles of a handful of windows would define
 "confident" differently from the proteome run. Applied to the human windows
 of the 7-IDR sample, these cut-offs give exactly the published blocks. A fresh
 recomputation can still differ slightly, because the patterning z-scores come
-from random scrambles. On the command line the same cut-offs are
+from random scrambles. On the command line, the same cut-offs are
 `--seed_min_dist_threshold` / `--seed_inter_dist_threshold`.
 
 ## Layout
@@ -178,7 +178,7 @@ sbatch scripts/hpc/run_MB_slurm.sh  # edit the #SBATCH lines first
 ```
 
 Rebuild the published blocks from the windows file (block-building stage
-only). On the Sep 8 windows file this gives a summary byte-identical to
+only). On the Sep 8 windows file, this gives a summary byte-identical to
 `Hsapien_IDRs_ftl100aa.MultiBlock.fixedKernel.seedExpand.q60.out_summary.csv.gz`:
 
 ```
@@ -221,10 +221,7 @@ python src/nardini_summary_pipeline.py all \
 ## Notes
 
 - **Main output (published):** `results/multiblock/block_summary_seedExpantion.20260909.csv.gz`,
-  one row per IDR block. It is
-  `Hsapien_IDRs_ftl100aa.MultiBlock.fixedKernel.seedExpand.q60.out_summary.csv.gz`
-  exploded to blocks with `nardini_summary_pipeline.py blocks` (an earlier
-  version that did not yet write `valley_start` / `valley_end`).
+  one row per IDR block.
 - `block_summary_.csv.gz` is an export from `nardini_summary_pipeline.py` that
   adds `valley_start` / `valley_end`; the files in `results/summary_plots/`
   and `domain_architecture.csv.gz` come from that run.
