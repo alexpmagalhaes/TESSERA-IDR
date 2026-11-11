@@ -271,12 +271,14 @@ python src/nardini_summary_pipeline.py all \
   adds `valley_start` / `valley_end`; the files in `results/summary_plots/`
   and `domain_architecture.csv.gz` come from that run.
 
-## Attribution and citation
+## Citations
 
 The full-sequence pipeline (`tesseraidr fullseq`, formerly
-`nardini_fullSeq_numba_v096.py`) is a **reimplementation (rewrite) of
-NARDINI+** and the GIN cluster assignment from Ruff, King et al. It is not
-the original code. The per-window features in `tesseraidr multiblock` use the
+`nardini_fullSeq_numba_v096.py`) is a **reimplementation  of
+NARDINI+** and the GIN cluster assignment from Ruff, King et al. The
+original code was rewritten to enhance computational efficiency by 
+vectorizing operations and utilizing Numba for just-in-time compilation. 
+The per-window features in `tesseraidr multiblock` use the
 same reimplementation. The feature definitions, the human-IDRome
 normalisation and the 30 GIN centroids bundled in `src/tesseraidr/data/`
 come from that work. If you use TESSERA-IDR, please cite:
